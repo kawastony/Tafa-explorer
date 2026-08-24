@@ -99,3 +99,32 @@ opacity: 0; transition: opacity 0.3s; pointer-events: none;
 .left { max-width: min(220px, 55vw); }
 .modes button { padding: 5px 9px; font-size: 0.7rem; }
 }
+.chrono {
+  position: absolute; left: 12px; right: 12px; bottom: 78px;
+  background: rgba(9,9,11,0.82); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 8px 10px; backdrop-filter: blur(12px);
+  max-width: 720px; margin: 0 auto;
+}
+.chrono-label {
+  font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #71717a; margin-bottom: 6px;
+}
+.chrono-track {
+  display: flex; gap: 4px; overflow-x: auto; padding-bottom: 4px;
+  scrollbar-width: thin;
+}
+.chrono-pill {
+  flex: 0 0 auto; border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04); border-radius: 999px;
+  padding: 5px 10px; font-size: 0.68rem; cursor: pointer; color: #a1a1aa;
+  white-space: nowrap;
+}
+.chrono-pill:hover, .chrono-pill.on {
+  border-color: rgba(34,211,238,0.45); color: #22d3ee;
+  background: rgba(34,211,238,0.12);
+}
+.chrono-pill b { color: #e4e4e7; font-weight: 600; }
+@media (max-width: 640px) {
+  .chrono { bottom: 72px; left: 8px; right: 8px; }
+  .right { max-height: 40vh; overflow: auto; }
+}
