@@ -1,1 +1,80 @@
-PLACEHOLDER_IDX
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Tafa Explorer — Kawastony</title>
+<meta name="description" content="NASA-linked geometric universe observatory — light-year chronology, TAFA lens, Kawastony cosmology." />
+<link rel="stylesheet" href="app.css" />
+</head>
+<body>
+<div id="c"></div>
+<div class="hud">
+  <div class="top">
+    <div class="brand">TAFA <span>Explorer</span></div>
+    <div class="modes">
+      <button class="active" data-mode="sky">Sky</button>
+      <button data-mode="cosmos">Cosmos</button>
+      <button data-mode="lens">Lens</button>
+      <button data-mode="lab">Lab</button>
+      <button id="tourBtn" title="Guided visitation tour">Tour</button>
+      <button class="icon-btn" id="scoreBtn" title="Score">♪</button>
+    </div>
+  </div>
+
+  <div class="panel left" id="leftPanel">
+    <h3 id="leftTitle">NASA sky catalog</h3>
+    <div class="list" id="leftList"></div>
+    <p class="hint" id="leftHint">Distances from NASA Exoplanet Archive · light-travel chronology</p>
+  </div>
+
+  <div class="panel right" id="rightPanel">
+    <h3>Observatory</h3>
+    <div class="row"><span>Mode</span><b id="mMode">Sky</b></div>
+    <div class="row"><span>Target</span><b id="mTarget">—</b></div>
+    <div class="row"><span>Distance</span><b id="mDist">—</b></div>
+    <div class="row"><span>Light travel</span><b id="mLight">—</b></div>
+    <div class="row"><span>Light left</span><b id="mLeft">—</b></div>
+    <div class="row"><span>a(t)</span><b id="mScale">1.000</b></div>
+    <div class="row"><span>Lookback</span><b id="mLook">0.00 Gyr</b></div>
+    <div class="row"><span>H(z)</span><b id="mH">67.4</b></div>
+    <div class="row"><span>Ω_q</span><b id="mQ">0.042</b></div>
+    <label class="slider">Cosmic time / lookback scrubber
+      <input type="range" id="ageSlider" min="0.05" max="1" step="0.005" value="1" />
+    </label>
+    <p class="hint" id="rightHint">NASA distances · light-year chronology · Kawastony a(t)</p>
+  </div>
+
+  <div class="chrono" id="chrono">
+    <div class="chrono-label">Light-year chronology</div>
+    <div class="chrono-track" id="chronoTrack"></div>
+  </div>
+
+  <div class="score-panel" id="scorePanel">
+    <h3>Classical Score</h3>
+    <div class="type on" data-type="0"><div><strong>Baroque</strong><span>Bach · Prelude geometry</span></div></div>
+    <div class="type" data-type="1"><div><strong>Classical</strong><span>Mozart · ordered motion</span></div></div>
+    <div class="type" data-type="2"><div><strong>Nocturne</strong><span>Chopin · deep field quiet</span></div></div>
+    <div class="type" data-type="3"><div><strong>Pastoral</strong><span>Grieg · horizon dawn</span></div></div>
+    <div class="type" data-type="4"><div><strong>Meditation</strong><span>Suk · long baseline</span></div></div>
+    <label class="slider">Volume <input type="range" id="vol" min="0" max="1" step="0.02" value="0.4" /></label>
+  </div>
+
+  <div class="score-chip">
+    <button class="play" id="playBtn">▶</button>
+    <div class="meta">
+      <div class="t" id="trackTitle">Baroque</div>
+      <div class="s" id="trackSub">Tap ♪ · play while watching</div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+<script type="importmap">
+{"imports":{
+  "three":"https://unpkg.com/three@0.160.1/build/three.module.js",
+  "three/addons/":"https://unpkg.com/three@0.160.1/examples/jsm/"
+}}
+</script>
+<script type="module" src="app.js?v=7"></script>
+</body>
+</html>
