@@ -1,0 +1,12 @@
+xtContent='H0, Omega_q, lookback';rightHint.textContent='Observatory metrics';camera.position.set(0,8,16)}controls.target.set(0,m==='lens'?4:0,0);buildLeftList();toast(m[0].toUpperCase()+m.slice(1)+' mode')}
+document.querySelectorAll('.modes [data-mode]').forEach(btn=>btn.addEventListener('click',()=>setMode(btn.dataset.mode)));
+document.getElementById('ageSlider').addEventListener('input',e=>applyScale(parseFloat(e.target.value)));
+document.getElementById('playBtn').addEventListener('click',togglePlay);
+document.getElementById('vol').addEventListener('input',e=>{if(master)master.gain.value=parseFloat(e.target.value)});
+const scorePanel=document.getElementById('scorePanel');
+document.getElementById('scoreBtn').addEventListener('click',()=>scorePanel.classList.toggle('open'));
+document.querySelectorAll('.score-panel .type').forEach(el=>el.addEventListener('click',()=>{typeId=parseInt(el.dataset.type,10);document.querySelectorAll('.score-panel .type').forEach(x=>x.classList.toggle('on',x===el));document.getElementById('trackTitle').textContent=SCORE[typeId].label;document.getElementById('trackSub').textContent=SCORE[typeId].sub;scorePanel.classList.remove('open');if(playing)startScore();else togglePlay();toast(SCORE[typeId].label)}));
+const clock=new THREE.Clock();
+(function frame(){requestAnimationFrame(frame);const t=clock.getElapsedTime();controls.update();starsFar.rotation.y+=1e-4;starsNear.rotation.y-=1.5e-4;if(lensGroup.visible)lensGroup.rotation.y+=0.0012;if(labGroup.visible)labGroup.children.forEach((c,i)=>{if(c.rotation)c.rotation.z+=0.002*(i+1)});planetMeshes.forEach(({mesh,halo},i)=>{const pulse=1+0.08*Math.sin(t*2+i);halo.scale.setScalar(pulse*(selected===i?1.6:1));mesh.material.emissiveIntensity=selected===i?1.4:0.8});if(cosmosGroup.visible){hub.rotation.y+=0.01;cosmosPts.rotation.y+=8e-4}renderer.render(scene,camera)})();
+window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+buildChronology();setMode('sky');applyScale(1);selectPlanet(0);

@@ -1,0 +1,19 @@
+import * as THREE from 'https://unpkg.com/three@0.160.1/build/three.module.js';
+import { OrbitControls } from 'https://unpkg.com/three@0.160.1/examples/jsm/controls/OrbitControls.js';
+import { CATALOG } from './catalog.js';
+const NOW=2026,H0=67.4;
+function quantumOmega(a){const q=0.045*Math.pow(a,-0.35)+0.28*Math.pow(a,1.2);return Math.min(0.95,Math.max(0.01,q))}
+function Ez(a,Om=0.31){const Oq=quantumOmega(a),Or=9e-5,Ol=Math.max(0.01,1-Om-Or-0.04);return Math.sqrt(Om*Math.pow(a,-3)+Or*Math.pow(a,-4)+Ol+Oq*Math.pow(a,-1.2))}
+function Hz(a){return H0*Ez(a)}
+function lookbackGyr(a){return 13.8*(1-Math.pow(a,1.35))}
+function lightLeftYear(ly){return ly>5e4?'deep time':String(Math.round(NOW-ly))}
+function fmtLy(ly){return ly<100?ly.toFixed(1)+' ly':ly<1e3?ly.toFixed(0)+' ly':(ly/1e3).toFixed(2)+' kly'}
+const SCORE=[{id:'baroque',label:'Baroque',sub:'Bach · Prelude geometry',base:130.81,pattern:[0,2,4,7,9,12,7,4]},{id:'classical',label:'Classical',sub:'Mozart · ordered motion',base:174.61,pattern:[0,4,7,12,7,4,0,7]},{id:'nocturne',label:'Nocturne',sub:'Chopin · deep field quiet',base:116.54,pattern:[0,3,7,10,7,3,0,5]},{id:'pastoral',label:'Pastoral',sub:'Grieg · horizon dawn',base:146.83,pattern:[0,5,7,12,9,5,2,0]},{id:'meditation',label:'Meditation',sub:'Suk · long baseline',base:98,pattern:[0,5,7,12,19,12,7,5]}];
+let audioCtx,master,playing=false,typeId=0,oscNodes=[],stepTimer,step=0;
+function ensureAudio(){if(audioCtx)return;audioCtx=new(window.AudioContext||window.webkitAudioContext);master=audioCtx.createGain();master.gain.value=parseFloat(document.getElementById('vol').value);master.connect(audioCtx.destination)}
+function stopScore(){if(stepTimer){clearInterval(stepTimer);stepTimer=null}oscNodes.forEach(n=>{try{n.stop()}catch{}});oscNodes=[]}
+function pulseNote(freq,dur,type='sine',gain=0.05){if(!audioCtx||!playing)return;const o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.value=freq;const t0=audioCtx.currentTime;g.gain.setValueAtTime(1e-4,t0);g.gain.exponentialRampToValueAtTime(gain,t0+0.03);g.gain.exponentialRampToValueAtTime(1e-4,t0+dur);o.connect(g);g.connect(master);o.start(t0);o.stop(t0+dur+0.02);oscNodes.push(o)}
+function startScore(){ensureAudio();if(audioCtx.state==='suspended')audioCtx.resume();stopScore();playing=true;step=0;const piece=SCORE[typeId];stepTimer=setInterval(()=>{const semi=piece.pattern[step%piece.pattern.length],f=piece.base*Math.pow(2,semi/12);pulseNote(f,0.55,step%2?'triangle':'sine',0.045);pulseNote(f*0.5,0.8,'sine',0.025);if(step%4===0)pulseNote(f*2,0.35,'sine',0.02);step++},typeId===2||typeId===4?520:380);document.getElementById('playBtn').textContent='\u25ae\u25ae'}
+function togglePlay(){if(playing){playing=false;stopScore();document.getElementById('playBtn').textContent='\u25b6'}else startScore()}
+const root=document.getElementById('c'),scene=new THREE.Scene();scene.background=new THREE.Color(0x09090b);scene.fog=new THREE.FogExp2(0x09090b,0.012);
+const camera=new THREE.Perspective
