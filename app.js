@@ -1,1 +1,1 @@
-import './main.js?v=4';
+import './main.js?v=5';
