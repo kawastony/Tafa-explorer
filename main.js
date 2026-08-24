@@ -68,4 +68,24 @@ document.querySelectorAll('.score-panel .type').forEach(el=>el.onclick=()=>{type
 const clock=new THREE.Clock();
 (function f(){requestAnimationFrame(f);const t=clock.getElapsedTime();controls.update();stars.rotation.y+=1e-4;if(lenG.visible)lenG.rotation.y+=.001;meshes.forEach(({m,h},i)=>{h.scale.setScalar(1+.08*Math.sin(t*2+i)*(sel===i?1.5:1));m.material.emissiveIntensity=sel===i?1.3:.8});if(cosG.visible){hub.rotation.y+=.01;cpts.rotation.y+=8e-4}renderer.render(scene,camera)})();
 onresize=()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)};
+// Guided Tour / Visitation
+let touring=false,tourIdx=0,tourTimer=null;
+const TOUR_SEQ=[0,1,2,3,4,5,6,16,18,22,24];
+const tourBtn=document.getElementById('tourBtn');
+function stopTour(){touring=false;if(tourTimer){clearTimeout(tourTimer);tourTimer=null}controls.autoRotate=true;if(tourBtn)tourBtn.textContent='Tour'}
+function nextTourStop(){
+  if(!touring)return;
+  const i=TOUR_SEQ[tourIdx%TOUR_SEQ.length];
+  setMode('sky');pick(i);controls.autoRotate=false;
+  const p=CATALOG[i];
+  toast('Tour · '+p.name+' · light left ~'+left(p.dist_ly));
+  tourIdx++;
+  tourTimer=setTimeout(nextTourStop,5500);
+}
+if(tourBtn)tourBtn.onclick=()=>{
+  if(touring){stopTour();toast('Tour stopped');return}
+  touring=true;tourIdx=0;tourBtn.textContent='Stop';
+  toast('Starting guided visitation…');
+  nextTourStop();
+};
 chrono();setMode('sky');scale(1);pick(0);
